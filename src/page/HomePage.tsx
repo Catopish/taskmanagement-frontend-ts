@@ -1,7 +1,11 @@
+import { NavbarWithMegaMenu } from "../components/Navbar";
+import { SimpleCard } from "../components/Card";
+
 export default function HomePage() {
   return (
-    <div>
-      <p>homepage</p>
-    </div>
+    <>
+      <NavbarWithMegaMenu />
+      <SimpleCard title="Bantu Bapaks" desc="Cuci mobil jam 4" />
+    </>
   );
 }
