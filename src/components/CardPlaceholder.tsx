@@ -6,23 +6,49 @@ import {
   Textarea,
   Input,
 } from "@material-tailwind/react";
+import { useState } from "react";
 
-export function SimpleCardPlaceholder() {
+export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
+  const [newTitle, setNewTitle] = useState("");
+  const [newDesc, setNewDesc] = useState("");
+
+  function AddTask() {
+    if (newTitle === "") {
+      alert("Title must be filled");
+      return;
+    }
+    const newItem = { title: newTitle, desc: newDesc, id: task.length + 1 };
+    onAddTask(newItem);
+
+    setNewTitle("");
+    setNewDesc("");
+    onCancel(false);
+    //what function to add task that input to Input and Textarea
+  }
+
   return (
     <Card className=" mt-6 w-96 flex-wrap">
-      <CardBody>
-        <div className="flex w-72 flex-col gap-6">
-          <Input
-            crossOrigin=""
-            variant="standard"
-            label="Title"
-            placeholder="Write what you gonna do!"
-          />
-          <Textarea variant="outlined" label="Describe your task!" />
-        </div>
+      <CardBody className="flex w-72 flex-col gap-6">
+        <Input
+          crossOrigin=""
+          variant="standard"
+          label="Title"
+          placeholder="Write what you gonna do!"
+          onChange={(e) => setNewTitle(e.target.value)}
+        />
+        <Textarea
+          variant="outlined"
+          label="Describe your task!"
+          onChange={(e) => setNewDesc(e.target.value)}
+        />
       </CardBody>
       <CardFooter className="pt-0">
-        <Button>Add Task</Button>
+        <div className="flex gap-6">
+          <Button onClick={AddTask}>Add Task</Button>
+          {task.length > 0 && (
+            <Button onClick={() => onCancel(false)}>Cancel</Button>
+          )}
+        </div>
       </CardFooter>
     </Card>
   );
