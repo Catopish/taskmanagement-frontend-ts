@@ -20,28 +20,30 @@ export function SimpleCard({ task, onDeleteTask }) {
         <Typography>{desc}</Typography>
       </CardBody>
       <CardFooter className="pt-0">
-        <div className="flex gap-6">
-          <Button>Read More</Button>
-          <IconButton
-            color={done ? "deep-orange" : "green"}
-            className="rounded-full flex-wrap-reverse"
-            onClick={() => setDone(!done)}
-          >
-            <i
-              className={
-                done
-                  ? "fa-solid fa-rotate-left"
-                  : "fa-duotone fa-solid fa-check"
-              }
-            />
-          </IconButton>
-          <IconButton
-            color="red"
-            className="rounded-full flex-wrap-reverse"
-            onClick={() => onDeleteTask(task.id)}
-          >
-            <i className="fa-solid fa-trash" />
-          </IconButton>
+        <div className="flex gap-6 flex-row justify-between">
+          <Button className="self-start">Read More</Button>
+          <div className="flex gap-6">
+            <IconButton
+              color={done ? "deep-orange" : "green"}
+              className="rounded-full "
+              onClick={() => setDone(!done)}
+            >
+              <i
+                className={
+                  done
+                    ? "fa-solid fa-rotate-left"
+                    : "fa-duotone fa-solid fa-check"
+                }
+              />
+            </IconButton>
+            <IconButton
+              color="red"
+              className="rounded-full "
+              onClick={() => onDeleteTask(task.id)}
+            >
+              <i className="fa-solid fa-trash" />
+            </IconButton>
+          </div>
         </div>
       </CardFooter>
     </Card>
