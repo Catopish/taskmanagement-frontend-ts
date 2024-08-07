@@ -6,7 +6,7 @@ import {
   Textarea,
   Input,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
   const [newTitle, setNewTitle] = useState("");
@@ -23,8 +23,24 @@ export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
     setNewTitle("");
     setNewDesc("");
     onCancel(false);
-    //what function to add task that input to Input and Textarea
   }
+
+  useEffect(
+    function () {
+      function CallBack(e) {
+        if (e.code === "Enter") {
+          AddTask();
+        }
+      }
+
+      document.addEventListener("keydown", CallBack);
+
+      return function () {
+        document.removeEventListener("keydown", CallBack);
+      };
+    },
+    [AddTask],
+  );
 
   return (
     <Card className=" mt-6 w-96 flex-wrap">
