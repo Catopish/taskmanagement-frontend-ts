@@ -7,12 +7,18 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { useState } from "react";
+import { Tasks } from "../interface/tasks.interface";
 const collapsedNumWord = 10;
 
-export function SimpleCard({ task, onDeleteTask }) {
+interface SimpleCardProps {
+  task: Tasks;
+  onDeleteTask: (id: number) => void;
+}
+
+export function SimpleCard({ task, onDeleteTask }: SimpleCardProps) {
   const [done, setDone] = useState(false);
   const [collapsedOrNot, setCollapseOrNot] = useState(true);
-  const { title, desc } = task;
+  const { title, description: desc } = task;
   const collapsed = desc.split(" ").length > collapsedNumWord;
   const displayText = collapsed
     ? desc.split(" ").slice(0, collapsedNumWord).join(" ") + "..."

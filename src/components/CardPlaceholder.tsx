@@ -7,8 +7,18 @@ import {
   Input,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
+import { Tasks } from "../interface/tasks.interface";
 
-export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
+interface CardholderProps {
+  onAddTask: (task: Tasks) => void;
+  onCancel: (val: boolean) => void;
+  hasTasks: boolean;
+}
+export function SimpleCardPlaceholder({
+  onAddTask,
+  onCancel,
+  hasTasks,
+}: CardholderProps) {
   const [newTitle, setNewTitle] = useState("");
   const [newDesc, setNewDesc] = useState("");
 
@@ -17,7 +27,11 @@ export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
       alert("Title must be filled");
       return;
     }
-    const newItem = { title: newTitle, desc: newDesc, id: task.length + 1 };
+    const newItem: Tasks = {
+      title: newTitle,
+      description: newDesc,
+      id: Date.now(),
+    };
     onAddTask(newItem);
 
     setNewTitle("");
@@ -27,7 +41,7 @@ export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
 
   useEffect(
     function () {
-      function CallBack(e) {
+      function CallBack(e: KeyboardEvent) {
         if (e.code === "Enter") {
           AddTask();
         }
@@ -61,9 +75,7 @@ export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
       <CardFooter className="pt-0">
         <div className="flex gap-6">
           <Button onClick={AddTask}>Add Task</Button>
-          {task.length > 0 && (
-            <Button onClick={() => onCancel(false)}>Cancel</Button>
-          )}
+          {hasTasks && <Button onClick={() => onCancel(false)}>Cancel</Button>}
         </div>
       </CardFooter>
     </Card>
