@@ -19,7 +19,7 @@ export function SimpleCard({ task, onDeleteTask }) {
     : desc;
 
   return (
-    <Card className=" mt-6 w-96 flex-wrap">
+    <Card className=" mt-6 w-96 flex-wrap animate-slideInRight">
       <CardBody className={done ? "line-through decoration-red-900" : ""}>
         <Typography variant="h5" color="blue-gray" className="mb-2">
           {title}

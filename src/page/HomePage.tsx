@@ -37,7 +37,11 @@ export default function HomePage() {
       <div className="flex flex-wrap justify-center gap-4 mt-4">
         {task.length > 0 ? (
           task.map((task) => (
-            <SimpleCard task={task} onDeleteTask={handleDeleteTask} />
+            <SimpleCard
+              task={task}
+              onDeleteTask={handleDeleteTask}
+              key={task.id}
+            />
           ))
         ) : (
           <SimpleCardPlaceholder

@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import LoginScreen from "./page/LoginScreen";
 import HomePage from "./page/HomePage";
+import PageNotFound from "./page/PageNotFound";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/home" element={<HomePage />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>
   );

@@ -43,7 +43,7 @@ export function SimpleCardPlaceholder({ task, onAddTask, onCancel }) {
   );
 
   return (
-    <Card className=" mt-6 w-96 flex-wrap">
+    <Card className=" mt-6 w-96 flex-wrap animate-slideInRight">
       <CardBody className="flex w-72 flex-col gap-6">
         <Input
           crossOrigin=""
