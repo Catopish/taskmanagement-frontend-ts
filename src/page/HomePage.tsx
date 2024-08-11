@@ -57,20 +57,24 @@ export default function HomePage() {
           />
         )}
 
-        {task.length > 0 && !taskPlaceholder ? (
-          <div className="relative hidden sm:block">
+        {task.length > 0 && !taskPlaceholder && (
+          <>
+            <div className="relative hidden sm:block">
+              <div
+                className="absolute bottom-0 right-0 transform translate-x-11 translate-y-1"
+                onClick={() => setTaskPlaceholder(true)}
+              >
+                <ButtonAddTask />
+              </div>
+            </div>
             <div
-              className="absolute bottom-0 right-0 transform translate-x-11 translate-y-1"
+              className="w-full sm:hidden mt-4"
               onClick={() => setTaskPlaceholder(true)}
             >
               <ButtonAddTask />
             </div>
-          </div>
-        ) : null}
-
-        <div className="w-full sm:hidden mt-4">
-          <ButtonAddTask />
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
