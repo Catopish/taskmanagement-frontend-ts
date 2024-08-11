@@ -1,6 +1,5 @@
 # Task Management Demo Application
-
-![Task Management App](https://catopish-taskmanagement.vercel.app)
+https://catopish-taskmanagement.vercel.app
 
 ## Overview
 
