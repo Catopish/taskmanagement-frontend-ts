@@ -32,7 +32,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-fixed">
       <NavbarSimple />
-      <div className="flex flex-wrap justify-center gap-4 mt-4">
+      <div className="flex flex-wrap justify-center gap-4 mt-4 mx-auto max-w-screen-xl px-6 py-3">
         {task.length > 0 ? (
           task.map((task) => (
             <SimpleCard
@@ -58,7 +58,7 @@ export default function HomePage() {
         )}
 
         {task.length > 0 && !taskPlaceholder ? (
-          <div className="relative">
+          <div className="relative hidden sm:block">
             <div
               className="absolute bottom-0 right-0 transform translate-x-11 translate-y-1"
               onClick={() => setTaskPlaceholder(true)}
@@ -67,6 +67,10 @@ export default function HomePage() {
             </div>
           </div>
         ) : null}
+
+        <div className="w-full sm:hidden mt-4">
+          <ButtonAddTask />
+        </div>
       </div>
     </div>
   );
