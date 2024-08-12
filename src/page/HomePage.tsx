@@ -1,9 +1,10 @@
 import { SimpleCard } from "../components/SimpleCard";
 import ButtonAddTask from "../components/ButtonAddTask";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SimpleCardPlaceholder } from "../components/CardPlaceholder";
 import { NavbarSimple } from "../components/Navbar";
 import { Tasks } from "../interface/tasks.interface";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const tasks: Tasks[] = [
   {
@@ -22,6 +23,17 @@ const tasks: Tasks[] = [
 export default function HomePage() {
   const [task, setTask] = useState<Tasks[]>(tasks);
   const [taskPlaceholder, setTaskPlaceholder] = useState(false);
+  const [isLoginVisible, setIsLoginVisible] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if the current path is /login or /signup on page load
+    if (location.pathname === "/login" || location.pathname === "/signup") {
+      // Redirect to home (/) if page is refreshed on these routes
+      navigate("/");
+    }
+  }, []);
 
   function handleAddTask(task: Tasks) {
     setTask((tasks) => [...tasks, task]);
@@ -30,9 +42,12 @@ export default function HomePage() {
     setTask((tasks) => tasks.filter((task) => task.id !== id));
   }
   return (
-    <div className="flex flex-col min-h-screen bg-fixed">
-      <NavbarSimple />
-      <div className="flex flex-wrap justify-center gap-4 mt-4 mx-auto max-w-screen-xl px-6 py-3">
+    <div className="flex flex-col min-h-screen bg-fixed  ">
+      <NavbarSimple handleLogin={setIsLoginVisible} isLogin={isLoginVisible} />
+      {isLoginVisible && <Outlet />}
+      <div
+        className={`${isLoginVisible ? "blur-sm" : ""} flex flex-wrap justify-center gap-4 mt-4 mx-auto max-w-screen-xl px-6 py-3`}
+      >
         {task.length > 0 ? (
           task.map((task) => (
             <SimpleCard
