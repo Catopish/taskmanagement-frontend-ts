@@ -7,7 +7,7 @@ import {
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
-function NavList({ handleLogin, isLogin }) {
+function NavList() {
   return (
     <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {/* <Typography */}
@@ -67,7 +67,7 @@ function NavList({ handleLogin, isLogin }) {
   );
 }
 
-export function NavbarSimple({ handleLogin, isLogin }) {
+export function NavbarSimple() {
   const [openNav, setOpenNav] = React.useState(false);
 
   const handleWindowResize = () =>
@@ -94,7 +94,7 @@ export function NavbarSimple({ handleLogin, isLogin }) {
           <em className="opacity-65"> ~manage your task with ease~</em>
         </Typography>
         <div className="hidden lg:block">
-          <NavList handleLogin={handleLogin} isLogin={isLogin} />
+          <NavList />
         </div>
         <IconButton
           variant="text"
@@ -110,7 +110,7 @@ export function NavbarSimple({ handleLogin, isLogin }) {
         </IconButton>
       </div>
       <Collapse open={openNav}>
-        <NavList handleLogin={handleLogin} isLogin={isLogin} />
+        <NavList />
       </Collapse>
     </Navbar>
   );
