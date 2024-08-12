@@ -6,7 +6,6 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
 
 function NavList({ handleLogin, isLogin }) {
   return (
@@ -24,20 +23,20 @@ function NavList({ handleLogin, isLogin }) {
       {/*     Pages */}
       {/*   </a> */}
       {/* </Typography> */}
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-medium"
-      >
-        <Link
-          className="flex items-center hover:text-blue-500 transition-colors"
-          onClick={() => handleLogin(!isLogin)}
-          to="/login"
-        >
-          LOGINSCREEN
-        </Link>
-      </Typography>
+      {/* <Typography */}
+      {/*   as="li" */}
+      {/*   variant="small" */}
+      {/*   color="blue-gray" */}
+      {/*   className="p-1 font-medium" */}
+      {/* > */}
+      {/*   <Link */}
+      {/*     className="flex items-center hover:text-blue-500 transition-colors" */}
+      {/*     onClick={() => handleLogin(!isLogin)} */}
+      {/*     to="/login" */}
+      {/*   > */}
+      {/*     LOGINSCREEN */}
+      {/*   </Link> */}
+      {/* </Typography> */}
       <Typography
         as="li"
         variant="small"
@@ -51,19 +50,19 @@ function NavList({ handleLogin, isLogin }) {
           Github
         </a>
       </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-medium"
-      >
-        <a
-          href="https://lh3.googleusercontent.com/4BcOYDs5e95hVbpGR0kDVKXRVAldcyYoHrM3q7Ashp2JrVARBVgglUwS_xPaIg_yuqWZJEpwlIjHUcQ63i9SPZBMq5E-t3A9EH5VX1y_mcRY_IbhYbg=s0"
-          className="flex items-center hover:text-blue-500 transition-colors"
-        >
-          Docs
-        </a>
-      </Typography>
+      {/* <Typography */}
+      {/*   as="li" */}
+      {/*   variant="small" */}
+      {/*   color="blue-gray" */}
+      {/*   className="p-1 font-medium" */}
+      {/* > */}
+      {/*   <a */}
+      {/*     href="https://lh3.googleusercontent.com/4BcOYDs5e95hVbpGR0kDVKXRVAldcyYoHrM3q7Ashp2JrVARBVgglUwS_xPaIg_yuqWZJEpwlIjHUcQ63i9SPZBMq5E-t3A9EH5VX1y_mcRY_IbhYbg=s0" */}
+      {/*     className="flex items-center hover:text-blue-500 transition-colors" */}
+      {/*   > */}
+      {/*     Docs */}
+      {/*   </a> */}
+      {/* </Typography> */}
     </ul>
   );
 }
