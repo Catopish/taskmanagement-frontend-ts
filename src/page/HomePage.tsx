@@ -32,7 +32,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-fixed  ">
       <NavbarSimple />
-      <div className="flex flex-wrap justify-center gap-4 mt-4 mx-auto max-w-screen-xl px-6 py-3">
+      <div className="flex flex-wrap justify-center gap-4 mt-4">
         {task.length > 0 ? (
           task.map((task) => (
             <SimpleCard
