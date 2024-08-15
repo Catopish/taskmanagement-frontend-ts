@@ -1,10 +1,10 @@
 import { SimpleCard } from "../components/SimpleCard";
 import ButtonAddTask from "../components/ButtonAddTask";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SimpleCardPlaceholder } from "../components/CardPlaceholder";
 import { NavbarSimple } from "../components/Navbar";
 import { Tasks } from "../interface/tasks.interface";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 interface MainBodyProps {
   handleAddTask: (task: Tasks) => void;
@@ -34,6 +34,17 @@ export default function HomePage() {
   const [isTaskPlaceholderVisible, setIsTaskPlaceholderVisible] =
     useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const navigate = useNavigate();
+
+  // NOTE: Removing signup and sign in page from the home page
+  useEffect(() => {
+    if (
+      window.location.pathname === "/signup" ||
+      window.location.pathname === "/signin"
+    ) {
+      navigate("/");
+    }
+  }, []);
 
   const handleAddTask = useCallback((task: Tasks) => {
     setTask((tasks) => [...tasks, task]);

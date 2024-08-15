@@ -38,7 +38,6 @@ export function SignInCard() {
           <Link to="/signup">
             <Typography
               as="a"
-              href="#signup"
               variant="small"
               color="blue-gray"
               className="ml-1 font-bold"

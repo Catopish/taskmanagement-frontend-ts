@@ -59,15 +59,16 @@ export function NavbarSimple({ handleLogin, isLogin }: React.ComponentState) {
   return (
     <Navbar className="mx-auto max-w-screen-xl px-6 py-3 slide-in-top">
       <div className="flex items-center justify-between text-blue-gray-900">
-        <Typography
-          as="a"
-          href="#"
-          variant="h6"
-          className="mr-4 cursor-pointer py-1.5"
-        >
-          Task Management
-          <em className="opacity-65"> ~manage your task with ease~</em>
-        </Typography>
+        <Link to="/">
+          <Typography
+            as="a"
+            variant="h6"
+            className="mr-4 cursor-pointer py-1.5"
+          >
+            Task Management
+            <em className="opacity-65"> ~manage your task with ease~</em>
+          </Typography>
+        </Link>
         <div className="hidden lg:block">
           <NavList handleLogin={handleLogin} isLogin={isLogin} />
         </div>
