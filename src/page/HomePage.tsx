@@ -6,6 +6,15 @@ import { NavbarSimple } from "../components/Navbar";
 import { Tasks } from "../interface/tasks.interface";
 import { Outlet } from "react-router-dom";
 
+interface MainBodyProps {
+  handleAddTask: (task: Tasks) => void;
+  handleDeleteTask: (id: number) => void;
+  isLogin: boolean;
+  isTaskPlaceholderVisible: boolean;
+  setIsTaskPlaceholderVisible: (value: boolean) => void;
+  task: Tasks[];
+}
+
 const tasks: Tasks[] = [
   {
     title: "Help cook dinner @ 9pm",
@@ -36,12 +45,39 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-fixed">
+      {/* NOTE: Navbar */}
       <NavbarSimple handleLogin={setIsLogin} isLogin={isLogin} />
+
+      {/* NOTE: Nampilin login/signup */}
       {isLogin ? (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <Outlet />
         </div>
       ) : null}
+
+      {/* NOTE: Main Body */}
+      <MainBody
+        handleAddTask={handleAddTask}
+        handleDeleteTask={handleDeleteTask}
+        isLogin={isLogin}
+        isTaskPlaceholderVisible={isTaskPlaceholderVisible}
+        setIsTaskPlaceholderVisible={setIsTaskPlaceholderVisible}
+        task={task}
+      />
+    </div>
+  );
+}
+
+function MainBody({
+  handleAddTask,
+  handleDeleteTask,
+  isLogin,
+  isTaskPlaceholderVisible,
+  setIsTaskPlaceholderVisible,
+  task,
+}: MainBodyProps) {
+  return (
+    <>
       <div
         className={`flex flex-wrap justify-center gap-4 mt-4 ${isLogin ? "blur-sm" : ""}`}
       >
@@ -88,6 +124,6 @@ export default function HomePage() {
           </>
         )}
       </div>
-    </div>
+    </>
   );
 }
