@@ -8,8 +8,9 @@ import {
   Checkbox,
   Button,
 } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
-export function SignUpCard() {
+export function SignInCard() {
   return (
     <Card className="w-96">
       <CardHeader
@@ -18,7 +19,7 @@ export function SignUpCard() {
         className="mb-4 grid h-28 place-items-center"
       >
         <Typography variant="h3" color="white">
-          Sign Up
+          Sign In
         </Typography>
       </CardHeader>
       <CardBody className="flex flex-col gap-4">
@@ -34,15 +35,17 @@ export function SignUpCard() {
         </Button>
         <Typography variant="small" className="mt-6 flex justify-center">
           Don&apos;t have an account?
-          <Typography
-            as="a"
-            href="#signup"
-            variant="small"
-            color="blue-gray"
-            className="ml-1 font-bold"
-          >
-            Sign up
-          </Typography>
+          <Link to="/signup">
+            <Typography
+              as="a"
+              href="#signup"
+              variant="small"
+              color="blue-gray"
+              className="ml-1 font-bold"
+            >
+              Sign up
+            </Typography>
+          </Link>
         </Typography>
       </CardFooter>
     </Card>

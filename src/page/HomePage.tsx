@@ -1,9 +1,10 @@
 import { SimpleCard } from "../components/SimpleCard";
 import ButtonAddTask from "../components/ButtonAddTask";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { SimpleCardPlaceholder } from "../components/CardPlaceholder";
 import { NavbarSimple } from "../components/Navbar";
 import { Tasks } from "../interface/tasks.interface";
+import { Outlet } from "react-router-dom";
 
 const tasks: Tasks[] = [
   {
@@ -21,18 +22,29 @@ const tasks: Tasks[] = [
 
 export default function HomePage() {
   const [task, setTask] = useState<Tasks[]>(tasks);
-  const [taskPlaceholder, setTaskPlaceholder] = useState(false);
+  const [isTaskPlaceholderVisible, setIsTaskPlaceholderVisible] =
+    useState(false);
+  const [isLogin, setIsLogin] = useState(false);
 
-  function handleAddTask(task: Tasks) {
+  const handleAddTask = useCallback((task: Tasks) => {
     setTask((tasks) => [...tasks, task]);
-  }
-  function handleDeleteTask(id: number): void {
+  }, []);
+
+  const handleDeleteTask = useCallback((id: number) => {
     setTask((tasks) => tasks.filter((task) => task.id !== id));
-  }
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen bg-fixed  ">
-      <NavbarSimple />
-      <div className="flex flex-wrap justify-center gap-4 mt-4">
+    <div className="flex flex-col min-h-screen bg-fixed">
+      <NavbarSimple handleLogin={setIsLogin} isLogin={isLogin} />
+      {isLogin ? (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <Outlet />
+        </div>
+      ) : null}
+      <div
+        className={`flex flex-wrap justify-center gap-4 mt-4 ${isLogin ? "blur-sm" : ""}`}
+      >
         {task.length > 0 ? (
           task.map((task) => (
             <SimpleCard
@@ -45,31 +57,31 @@ export default function HomePage() {
           <SimpleCardPlaceholder
             hasTasks={task.length > 0}
             onAddTask={handleAddTask}
-            onCancel={setTaskPlaceholder}
+            onCancel={() => setIsTaskPlaceholderVisible(false)}
           />
         )}
 
-        {taskPlaceholder && (
+        {isTaskPlaceholderVisible && (
           <SimpleCardPlaceholder
             hasTasks={task.length > 0}
             onAddTask={handleAddTask}
-            onCancel={setTaskPlaceholder}
+            onCancel={() => setIsTaskPlaceholderVisible(false)}
           />
         )}
 
-        {task.length > 0 && !taskPlaceholder && (
+        {task.length > 0 && !isTaskPlaceholderVisible && (
           <>
             <div className="relative hidden sm:block">
               <div
                 className="absolute bottom-0 right-0 transform translate-x-11 translate-y-1"
-                onClick={() => setTaskPlaceholder(true)}
+                onClick={() => setIsTaskPlaceholderVisible(true)}
               >
                 <ButtonAddTask />
               </div>
             </div>
             <div
               className="w-full sm:hidden mt-4"
-              onClick={() => setTaskPlaceholder(true)}
+              onClick={() => setIsTaskPlaceholderVisible(true)}
             >
               <ButtonAddTask />
             </div>

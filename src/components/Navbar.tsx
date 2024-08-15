@@ -6,37 +6,25 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Link } from "react-router-dom";
 
-function NavList() {
+function NavList({ handleLogin, isLogin }: React.ComponentState) {
   return (
     <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      {/* <Typography */}
-      {/*   as="li" */}
-      {/*   variant="small" */}
-      {/*   color="blue-gray" */}
-      {/*   className="p-1 font-medium" */}
-      {/* > */}
-      {/*   <a */}
-      {/*     href="#" */}
-      {/*     className="flex items-center hover:text-blue-500 transition-colors" */}
-      {/*   > */}
-      {/*     Pages */}
-      {/*   </a> */}
-      {/* </Typography> */}
-      {/* <Typography */}
-      {/*   as="li" */}
-      {/*   variant="small" */}
-      {/*   color="blue-gray" */}
-      {/*   className="p-1 font-medium" */}
-      {/* > */}
-      {/*   <Link */}
-      {/*     className="flex items-center hover:text-blue-500 transition-colors" */}
-      {/*     onClick={() => handleLogin(!isLogin)} */}
-      {/*     to="/login" */}
-      {/*   > */}
-      {/*     LOGINSCREEN */}
-      {/*   </Link> */}
-      {/* </Typography> */}
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-medium"
+      >
+        <Link
+          className="flex items-center hover:text-blue-500 transition-colors"
+          onClick={() => handleLogin(!isLogin)}
+          to="/signin"
+        >
+          LOGINSCREEN
+        </Link>
+      </Typography>
       <Typography
         as="li"
         variant="small"
@@ -50,24 +38,11 @@ function NavList() {
           Github
         </a>
       </Typography>
-      {/* <Typography */}
-      {/*   as="li" */}
-      {/*   variant="small" */}
-      {/*   color="blue-gray" */}
-      {/*   className="p-1 font-medium" */}
-      {/* > */}
-      {/*   <a */}
-      {/*     href="https://lh3.googleusercontent.com/4BcOYDs5e95hVbpGR0kDVKXRVAldcyYoHrM3q7Ashp2JrVARBVgglUwS_xPaIg_yuqWZJEpwlIjHUcQ63i9SPZBMq5E-t3A9EH5VX1y_mcRY_IbhYbg=s0" */}
-      {/*     className="flex items-center hover:text-blue-500 transition-colors" */}
-      {/*   > */}
-      {/*     Docs */}
-      {/*   </a> */}
-      {/* </Typography> */}
     </ul>
   );
 }
 
-export function NavbarSimple() {
+export function NavbarSimple({ handleLogin, isLogin }: React.ComponentState) {
   const [openNav, setOpenNav] = React.useState(false);
 
   const handleWindowResize = () =>
@@ -94,7 +69,7 @@ export function NavbarSimple() {
           <em className="opacity-65"> ~manage your task with ease~</em>
         </Typography>
         <div className="hidden lg:block">
-          <NavList />
+          <NavList handleLogin={handleLogin} isLogin={isLogin} />
         </div>
         <IconButton
           variant="text"
@@ -110,7 +85,7 @@ export function NavbarSimple() {
         </IconButton>
       </div>
       <Collapse open={openNav}>
-        <NavList />
+        <NavList handleLogin={handleLogin} isLogin={isLogin} />
       </Collapse>
     </Navbar>
   );

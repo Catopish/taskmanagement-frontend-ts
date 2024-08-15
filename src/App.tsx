@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./page/HomePage";
 import PageNotFound from "./page/PageNotFound";
-import { LoginCard } from "./components/LoginCard";
+import { SignInCard } from "./components/SignInCard";
 import { SignUpCard } from "./components/SignUpCard";
 
 function App() {
@@ -9,8 +9,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />}>
-          // <Route path="login" element={<LoginCard />} />
-          // <Route path="signup" element={<SignUpCard />} />
+          <Route path="/signin" element={<SignInCard />} />
+          <Route path="/signup" element={<SignUpCard />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
