@@ -9,7 +9,7 @@ import {
   Button,
   Alert,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setErrorMessage, setSuccessMessage } from "../features/authSlice";
 import { RootState } from "../store";
@@ -20,7 +20,10 @@ export function SignUpCard() {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-
+  useEffect(function () {
+    dispatch(setErrorMessage(""));
+    dispatch(setSuccessMessage(""));
+  }, []);
   async function handleSignUp() {
     try {
       const response = await axios.post("/api/auth/signup", {
@@ -28,19 +31,22 @@ export function SignUpCard() {
         password,
       });
       dispatch(setSuccessMessage(response.statusText));
-      // console.log(response.status, response.statusText);
+      // console.log("1");
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 400) {
           dispatch(setErrorMessage(error.response.data.message[0]));
-          // console.log(error.response.data.message[0]);
+          // console.log("2");
+        } else if (error.response?.status === 409) {
+          // console.log("3");
+          dispatch(setErrorMessage(error.response?.data.message));
         } else {
-          dispatch(setErrorMessage("an error occured.."));
+          dispatch(setErrorMessage("Something went wrong"));
+          // console.log("4");
         }
       }
     }
   }
-  const headerColor = auth.successMessage !== "" ? "green" : "gray";
 
   const headerMessage =
     auth.successMessage !== "" ? auth.successMessage : auth.errorMessage;
@@ -49,7 +55,7 @@ export function SignUpCard() {
     <Card className="w-96">
       <CardHeader
         variant="gradient"
-        color={headerColor}
+        color="gray"
         className="mb-4 grid h-28 place-items-center"
       >
         <Typography variant="h3" color="white">
@@ -57,7 +63,12 @@ export function SignUpCard() {
         </Typography>
       </CardHeader>
       <CardBody className="flex flex-col gap-4">
-        {auth.errorMessage !== "" && <Alert color="red">{headerMessage}</Alert>}
+        {/* NOTE: Nampilin message */}
+        {auth.successMessage || auth.errorMessage ? (
+          <Alert color={auth.successMessage !== "" ? "green" : "red"}>
+            {headerMessage}
+          </Alert>
+        ) : null}
         <Input
           crossOrigin=""
           label="Username"

@@ -5,30 +5,50 @@ import {
   CardFooter,
   Typography,
   Input,
-  Checkbox,
   Button,
+  Alert,
 } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setJwtToken } from "../features/jwtTokenslice";
+import { setErrorMessage, setSuccessMessage } from "../features/authSlice";
+import { RootState } from "../store";
 
 export function SignInCard() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const auth = useSelector((state: RootState) => state.auth);
 
-  function handleSignIn() {
-    axios
-      .post("/api/auth/signin", {
+  useEffect(function () {
+    dispatch(setErrorMessage(""));
+    dispatch(setSuccessMessage(""));
+  }, []);
+
+  async function handleSignIn() {
+    try {
+      const response = await axios.post("/api/auth/signin", {
         username,
         password,
-      })
-      .then((response) => {
-        console.log(response.data.accessToken);
-      })
-      .catch((error) => {
-        console.log(error.message, error.code);
       });
+      dispatch(setJwtToken(response.data.accessToken));
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          console.log(error.response?.data.message, error.response?.status);
+          dispatch(setErrorMessage(error.response?.data.message));
+        } else {
+          dispatch(setErrorMessage("Something went wrong"));
+        }
+      }
+    }
   }
+
+  const headerMessage =
+    auth.successMessage !== "" ? auth.successMessage : auth.errorMessage;
+
   return (
     <Card className="w-96">
       <CardHeader
@@ -41,9 +61,15 @@ export function SignInCard() {
         </Typography>
       </CardHeader>
       <CardBody className="flex flex-col gap-4">
+        {/* NOTE: Nampilin message */}
+        {auth.successMessage || auth.errorMessage ? (
+          <Alert color={auth.successMessage !== "" ? "green" : "red"}>
+            {headerMessage}
+          </Alert>
+        ) : null}
         <Input
           crossOrigin=""
-          label="Email"
+          label="Username"
           size="lg"
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -53,9 +79,6 @@ export function SignInCard() {
           size="lg"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div className="-ml-2.5">
-          <Checkbox crossOrigin="" label="Remember Me" />
-        </div>
       </CardBody>
       <CardFooter className="pt-0">
         <Button variant="gradient" fullWidth onClick={handleSignIn}>
