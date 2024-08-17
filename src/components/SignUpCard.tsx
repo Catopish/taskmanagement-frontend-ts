@@ -20,10 +20,14 @@ export function SignUpCard() {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-  useEffect(function () {
-    dispatch(setErrorMessage(""));
-    dispatch(setSuccessMessage(""));
-  }, []);
+
+  useEffect(
+    function () {
+      dispatch(setErrorMessage(""));
+      dispatch(setSuccessMessage(""));
+    },
+    [dispatch],
+  );
   async function handleSignUp() {
     try {
       const response = await axios.post("/api/auth/signup", {

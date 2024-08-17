@@ -8,7 +8,7 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
-function NavList({ handleLogin, isLogin }: React.ComponentState) {
+function NavList({ handleLogin, isWannaLogin, isLogin }: React.ComponentState) {
   return (
     <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Typography
@@ -19,10 +19,10 @@ function NavList({ handleLogin, isLogin }: React.ComponentState) {
       >
         <Link
           className="flex items-center hover:text-blue-500 transition-colors"
-          onClick={() => handleLogin(!isLogin)}
+          onClick={() => handleLogin(!isWannaLogin)}
           to="/signin"
         >
-          LOGINSCREEN
+          {isLogin ? "Logout" : "Login"}
         </Link>
       </Typography>
       <Typography
@@ -42,7 +42,11 @@ function NavList({ handleLogin, isLogin }: React.ComponentState) {
   );
 }
 
-export function NavbarSimple({ handleLogin, isLogin }: React.ComponentState) {
+export function NavbarSimple({
+  handleLogin,
+  isWannaLogin,
+  isLogin,
+}: React.ComponentState) {
   const [openNav, setOpenNav] = React.useState(false);
 
   const handleWindowResize = () =>
@@ -70,7 +74,11 @@ export function NavbarSimple({ handleLogin, isLogin }: React.ComponentState) {
           </Typography>
         </Link>
         <div className="hidden lg:block">
-          <NavList handleLogin={handleLogin} isLogin={isLogin} />
+          <NavList
+            isLogin={isLogin}
+            handleLogin={handleLogin}
+            isWannaLogin={isWannaLogin}
+          />
         </div>
         <IconButton
           variant="text"
@@ -86,7 +94,7 @@ export function NavbarSimple({ handleLogin, isLogin }: React.ComponentState) {
         </IconButton>
       </div>
       <Collapse open={openNav}>
-        <NavList handleLogin={handleLogin} isLogin={isLogin} />
+        <NavList handleLogin={handleLogin} isWannaLogin={isWannaLogin} />
       </Collapse>
     </Navbar>
   );

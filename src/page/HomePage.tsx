@@ -9,7 +9,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 interface MainBodyProps {
   handleAddTask: (task: Tasks) => void;
   handleDeleteTask: (id: number) => void;
-  isLogin: boolean;
+  isWannaLogin: boolean;
   isTaskPlaceholderVisible: boolean;
   setIsTaskPlaceholderVisible: (value: boolean) => void;
   task: Tasks[];
@@ -33,8 +33,12 @@ export default function HomePage() {
   const [task, setTask] = useState<Tasks[]>(tasks);
   const [isTaskPlaceholderVisible, setIsTaskPlaceholderVisible] =
     useState(false);
+  const [isWannaLogin, setIsWannaLogin] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
+
+  const jwtToken = localStorage.getItem("jwtToken");
+  console.log(jwtToken);
 
   // NOTE: Removing signup and sign in page from the home page
   useEffect(() => {
@@ -43,6 +47,9 @@ export default function HomePage() {
       window.location.pathname === "/signin"
     ) {
       navigate("/");
+    }
+    if (jwtToken) {
+      setIsLogin(true);
     }
   }, []);
 
@@ -57,10 +64,14 @@ export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-fixed">
       {/* NOTE: Navbar */}
-      <NavbarSimple handleLogin={setIsLogin} isLogin={isLogin} />
+      <NavbarSimple
+        isLogin={isLogin}
+        handleLogin={setIsWannaLogin}
+        isWannaLogin={isWannaLogin}
+      />
 
       {/* NOTE: Nampilin login/signup */}
-      {isLogin ? (
+      {isWannaLogin ? (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <Outlet />
         </div>
@@ -70,7 +81,7 @@ export default function HomePage() {
       <MainBody
         handleAddTask={handleAddTask}
         handleDeleteTask={handleDeleteTask}
-        isLogin={isLogin}
+        isWannaLogin={isWannaLogin}
         isTaskPlaceholderVisible={isTaskPlaceholderVisible}
         setIsTaskPlaceholderVisible={setIsTaskPlaceholderVisible}
         task={task}
@@ -82,7 +93,7 @@ export default function HomePage() {
 function MainBody({
   handleAddTask,
   handleDeleteTask,
-  isLogin,
+  isWannaLogin,
   isTaskPlaceholderVisible,
   setIsTaskPlaceholderVisible,
   task,
@@ -90,7 +101,7 @@ function MainBody({
   return (
     <>
       <div
-        className={`flex flex-wrap justify-center gap-4 mt-4 ${isLogin ? "blur-sm" : ""}`}
+        className={`flex flex-wrap justify-center gap-4 mt-4 ${isWannaLogin ? "blur-sm" : ""}`}
       >
         {task.length > 0 ? (
           task.map((task) => (

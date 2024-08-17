@@ -22,10 +22,13 @@ export function SignInCard() {
   const dispatch = useDispatch();
   const auth = useSelector((state: RootState) => state.auth);
 
-  useEffect(function () {
-    dispatch(setErrorMessage(""));
-    dispatch(setSuccessMessage(""));
-  }, []);
+  useEffect(
+    function () {
+      dispatch(setErrorMessage(""));
+      dispatch(setSuccessMessage(""));
+    },
+    [dispatch],
+  );
 
   async function handleSignIn() {
     try {
@@ -34,6 +37,7 @@ export function SignInCard() {
         password,
       });
       dispatch(setJwtToken(response.data.accessToken));
+      window.location.href = "/";
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 401) {
