@@ -13,6 +13,10 @@ import { RootState } from "../store";
 
 function NavList({ handleLogin, isWannaLogin, isLogin }: React.ComponentState) {
   const dispatch = useDispatch();
+  const handleLogout = () => {
+    dispatch(clearJwtToken());
+    handleLogin(false);
+  };
 
   return (
     <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -26,7 +30,7 @@ function NavList({ handleLogin, isWannaLogin, isLogin }: React.ComponentState) {
           <a
             href=""
             className="flex items-center hover:text-blue-500 transition-colors"
-            onClick={() => dispatch(clearJwtToken())}
+            onClick={handleLogout}
           >
             Logout
           </a>

@@ -1,36 +1,35 @@
+//NOTE: Modules
+import { useCallback, useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import { Spinner } from "@material-tailwind/react";
+
+//NOTE: Components
 import { SimpleCard } from "../components/SimpleCard";
 import ButtonAddTask from "../components/ButtonAddTask";
-import { useCallback, useEffect, useState } from "react";
 import { SimpleCardPlaceholder } from "../components/CardPlaceholder";
 import { NavbarSimple } from "../components/Navbar";
 import { Tasks } from "../interface/tasks.interface";
-import { Outlet, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import UsernameInterface from "../interface/username.interface";
-import { useDispatch } from "react-redux";
 import { setName } from "../features/authSlice";
-import axios from "axios";
-
-interface MainBodyProps {
-  handleAddTask: (task: Tasks) => void;
-  handleDeleteTask: (id: number) => void;
-  isWannaLogin: boolean;
-  isTaskPlaceholderVisible: boolean;
-  setIsTaskPlaceholderVisible: (value: boolean) => void;
-  task: Tasks[];
-}
+import MainBodyProps from "../interface/mainBodyProps.interface";
+import { TaskStatus } from "../interface/taskStatus.enum";
 
 const tasks: Tasks[] = [
   {
+    id: 1,
     title: "Help cook dinner @ 9pm",
     description: "Dice onion first and let it marinade for 30 minutes",
-    id: 1,
+    status: TaskStatus.OPEN,
   },
   {
-    title: " Task 2",
+    id: 2,
+    title: "Demo Mode",
     description:
       "Velit vitae sapien, placerat elit suspendisse, convallis rhoncus praesent duis. Etiam feugiat etiam, morbi integer ullamcorper, tellus aenean tellus nunc. Metus pellentesque in, dignissim massa suscipit, imperdiet ac nam consequat. Ac penatibus tempor, arcu ut odio, a ultricies dapibus ultrices. Eu in praesent, gravida posuere suspendisse, pulvinar eu leo ante.",
-    id: 2,
+    status: TaskStatus.OPEN,
   },
 ];
 
@@ -40,41 +39,71 @@ export default function HomePage() {
     useState(false);
   const [isWannaLogin, setIsWannaLogin] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const jwtToken = localStorage.getItem("jwtToken");
 
-  // NOTE: Removing signup and sign in page from the home page
-  useEffect(() => {
-    async function fetchTask() {
+  async function fetchTask() {
+    try {
+      setIsLoading(true);
       const response = await axios.get("/api/tasks", {
         headers: {
           Authorization: `Bearer ${jwtToken}`,
         },
       });
       setTask(response.data);
-      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
+  // NOTE: Removing signup and sign in page from the home page
+  useEffect(() => {
     if (
       window.location.pathname === "/signup" ||
       window.location.pathname === "/signin"
     ) {
       navigate("/");
     }
-    if (jwtToken) {
-      setIsLogin(true);
-      const decode = jwtDecode<UsernameInterface>(jwtToken);
-      dispatch(setName(decode.username));
-      fetchTask();
-    }
   }, []);
 
-  const handleAddTask = useCallback((task: Tasks) => {
-    setTask((tasks) => [...tasks, task]);
-  }, []);
+  useEffect(() => {
+    if (jwtToken) {
+      try {
+        fetchTask();
+        setIsLogin(true);
+        const decode = jwtDecode<UsernameInterface>(jwtToken);
+        dispatch(setName(decode.username));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [jwtToken, dispatch]);
+
+  const handleAddTask = useCallback(
+    async (task: Tasks) => {
+      if (isLogin) {
+        try {
+          await axios.post("/api/tasks", task, {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          });
+          fetchTask();
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setTask((tasks) => [...tasks, task]);
+      }
+    },
+    [isLogin, jwtToken],
+  );
 
   const handleDeleteTask = useCallback((id: number) => {
     setTask((tasks) => tasks.filter((task) => task.id !== id));
@@ -97,14 +126,20 @@ export default function HomePage() {
       ) : null}
 
       {/* NOTE: Main Body */}
-      <MainBody
-        handleAddTask={handleAddTask}
-        handleDeleteTask={handleDeleteTask}
-        isWannaLogin={isWannaLogin}
-        isTaskPlaceholderVisible={isTaskPlaceholderVisible}
-        setIsTaskPlaceholderVisible={setIsTaskPlaceholderVisible}
-        task={task}
-      />
+      {isLoading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <Spinner className="h-12 w-12" />
+        </div>
+      ) : (
+        <MainBody
+          handleAddTask={handleAddTask}
+          handleDeleteTask={handleDeleteTask}
+          isWannaLogin={isWannaLogin}
+          isTaskPlaceholderVisible={isTaskPlaceholderVisible}
+          setIsTaskPlaceholderVisible={setIsTaskPlaceholderVisible}
+          task={task}
+        />
+      )}
     </div>
   );
 }
