@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   successMessage: "",
   errorMessage: "",
+  name: "",
 };
 
 const authSlice = createSlice({
@@ -15,8 +16,12 @@ const authSlice = createSlice({
     setSuccessMessage: (state, action) => {
       state.successMessage = action.payload;
     },
+    setName: (state, action) => {
+      state.name = action.payload;
+    },
   },
 });
 
-export const { setErrorMessage, setSuccessMessage } = authSlice.actions;
+export const { setErrorMessage, setSuccessMessage, setName } =
+  authSlice.actions;
 export default authSlice.reducer;

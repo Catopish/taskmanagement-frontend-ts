@@ -5,6 +5,11 @@ import { SimpleCardPlaceholder } from "../components/CardPlaceholder";
 import { NavbarSimple } from "../components/Navbar";
 import { Tasks } from "../interface/tasks.interface";
 import { Outlet, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import UsernameInterface from "../interface/username.interface";
+import { useDispatch } from "react-redux";
+import { setName } from "../features/authSlice";
+import axios from "axios";
 
 interface MainBodyProps {
   handleAddTask: (task: Tasks) => void;
@@ -35,13 +40,24 @@ export default function HomePage() {
     useState(false);
   const [isWannaLogin, setIsWannaLogin] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const jwtToken = localStorage.getItem("jwtToken");
-  console.log(jwtToken);
 
   // NOTE: Removing signup and sign in page from the home page
   useEffect(() => {
+    async function fetchTask() {
+      const response = await axios.get("/api/tasks", {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
+      setTask(response.data);
+      console.log(response.data);
+    }
+
     if (
       window.location.pathname === "/signup" ||
       window.location.pathname === "/signin"
@@ -50,6 +66,9 @@ export default function HomePage() {
     }
     if (jwtToken) {
       setIsLogin(true);
+      const decode = jwtDecode<UsernameInterface>(jwtToken);
+      dispatch(setName(decode.username));
+      fetchTask();
     }
   }, []);
 

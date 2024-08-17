@@ -7,8 +7,13 @@ import {
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { clearJwtToken } from "../features/jwtTokenslice";
+import { RootState } from "../store";
 
 function NavList({ handleLogin, isWannaLogin, isLogin }: React.ComponentState) {
+  const dispatch = useDispatch();
+
   return (
     <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Typography
@@ -17,13 +22,23 @@ function NavList({ handleLogin, isWannaLogin, isLogin }: React.ComponentState) {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <Link
-          className="flex items-center hover:text-blue-500 transition-colors"
-          onClick={() => handleLogin(!isWannaLogin)}
-          to="/signin"
-        >
-          {isLogin ? "Logout" : "Login"}
-        </Link>
+        {isLogin ? (
+          <a
+            href=""
+            className="flex items-center hover:text-blue-500 transition-colors"
+            onClick={() => dispatch(clearJwtToken())}
+          >
+            Logout
+          </a>
+        ) : (
+          <Link
+            className="flex items-center hover:text-blue-500 transition-colors"
+            onClick={() => handleLogin(!isWannaLogin)}
+            to="/signin"
+          >
+            Login
+          </Link>
+        )}
       </Typography>
       <Typography
         as="li"
@@ -48,6 +63,7 @@ export function NavbarSimple({
   isLogin,
 }: React.ComponentState) {
   const [openNav, setOpenNav] = React.useState(false);
+  const auth = useSelector((state: RootState) => state.auth);
 
   const handleWindowResize = () =>
     window.innerWidth >= 960 && setOpenNav(false);
@@ -73,6 +89,15 @@ export function NavbarSimple({
             <em className="opacity-65"> ~manage your task with ease~</em>
           </Typography>
         </Link>
+        {auth.name !== "" ? (
+          <Typography
+            as="a"
+            variant="h5"
+            className="mr-4 cursor-pointer py-1.5"
+          >
+            <em>Welcome {auth.name}</em>
+          </Typography>
+        ) : null}
         <div className="hidden lg:block">
           <NavList
             isLogin={isLogin}
