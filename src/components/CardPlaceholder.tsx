@@ -8,6 +8,7 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { Tasks } from "../interface/tasks.interface";
+import { TaskStatus } from "../interface/taskStatus.enum";
 
 interface CardholderProps {
   onAddTask: (task: Tasks) => void;
@@ -31,6 +32,7 @@ export function SimpleCardPlaceholder({
       title: newTitle,
       description: newDesc,
       id: Date.now(),
+      status: TaskStatus.OPEN,
     };
     onAddTask(newItem);
 
