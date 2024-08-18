@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { Spinner } from "@material-tailwind/react";
 
@@ -16,6 +16,7 @@ import UsernameInterface from "../interface/username.interface";
 import { setName } from "../features/authSlice";
 import MainBodyProps from "../interface/mainBodyProps.interface";
 import { TaskStatus } from "../interface/taskStatus.enum";
+import { RootState } from "../store";
 
 const tasks: Tasks[] = [
   {
@@ -44,7 +45,7 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const jwtToken = localStorage.getItem("jwtToken");
+  const jwtToken = useSelector((state: RootState) => state.jwt.jwt);
 
   async function fetchTask() {
     try {
@@ -105,9 +106,28 @@ export default function HomePage() {
     [isLogin, jwtToken],
   );
 
-  const handleDeleteTask = useCallback((id: number) => {
-    setTask((tasks) => tasks.filter((task) => task.id !== id));
-  }, []);
+  const handleDeleteTask = useCallback(
+    async (id: number) => {
+      console.log("1");
+      if (isLogin) {
+        try {
+          console.log("2");
+          await axios.delete(`/api/tasks/${id}`, {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+            },
+          });
+          fetchTask();
+        } catch (error) {
+          console.log("3");
+          console.log(error);
+        }
+      } else {
+        setTask((tasks) => tasks.filter((task) => task.id !== id));
+      }
+    },
+    [isLogin, jwtToken],
+  );
 
   return (
     <div className="flex flex-col min-h-screen bg-fixed">
